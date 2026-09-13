@@ -34,8 +34,8 @@ layers, each with a clear owner and a clear trust level.
 Each agent has a repo `kb-agent-<role>-<name>` containing its identity and durable memory as plain
 Markdown ([OKF](https://github.com/GoogleCloudPlatform/knowledge-catalog)-inspired):
 
-- `CLAUDE.md` — the whole always-on contract: identity, scope, gates, threat model. The one file the
-  runtime loads by itself, and therefore the only place a binding rule can live.
+- `CLAUDE.md` — the contract: identity, scope, gates, threat model. What loads at launch is stated
+  once, in `templates/kb-agent-shared/templates/agent-template.md`, "What loads at launch".
 - `memory/`, `skills/`, `tools/` — durable memory, self-authored procedures, tool notes.
 - `deploy/` — the runtime wiring (`topics.tsv`, `claude-settings.json`, per-agent systemd user units).
 - `shared/` — a symlink to the sibling clone of `kb-agent-shared`.

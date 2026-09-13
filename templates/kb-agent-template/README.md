@@ -31,20 +31,17 @@ the worked example, entirely with placeholders. Fill them in and the same shape 
 
 ## The portability pattern
 
-The **whole always-on contract lives in `CLAUDE.md`** — identity and voice, scope, threat model, gates —
-in Markdown, in the form Claude Code loads. It is symlinked to `~/CLAUDE.md` and written with absolute
-`~/github/...` paths so it resolves from any cwd, and it is **the only file the runtime loads by
-itself**. That is why there is no second identity file: a layer that loads only when the model chooses
-to obey an instruction is a suggestion, not a layer. The brain files (contract, memory, skills) are
-written for Claude Code — its entry file, its skills format, its memory store — and are not portable to
-another harness as they stand; the shape of a brain-in-Git is. See docs/portability.md in the
-claude-fleet-codex repo.
+The contract lives in `CLAUDE.md`, in Markdown, in the form Claude Code loads, written with absolute
+`~/github/...` paths so it resolves from cwd = `~`. What loads at launch, and why there is no second
+identity file, is stated once in `shared/templates/agent-template.md`, "What loads at launch". The brain
+files are written for Claude Code and are not portable to another harness as they stand; the shape of
+a brain-in-Git is. See docs/portability.md in the claude-fleet-codex repo.
 
 ## Repo shape
 
 | Path | Purpose |
 |---|---|
-| `CLAUDE.md` | **The whole always-on contract** — identity, voice, scope, gates, threat model. Symlinked to `~/CLAUDE.md`; the only file the runtime loads. |
+| `CLAUDE.md` | The contract — identity, scope, gates, threat model. Symlinked to `~/CLAUDE.md`. |
 | `deploy/topics.tsv` | Remote-Control topic sessions (`key<TAB>Display Name`). |
 | `deploy/claude-settings.json` | Curated, portable runtime settings (permissions, notifications). |
 | `.mcp.json` | MCP server structure with `${ENV}` placeholders — **no secrets**. Documentation of intent: it is only *read* if the session's cwd is this repo, or if it is passed explicitly with `--mcp-config`. See docs/context-budget.md. |

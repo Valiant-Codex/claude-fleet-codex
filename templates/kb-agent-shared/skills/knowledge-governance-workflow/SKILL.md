@@ -69,7 +69,7 @@ and `decision-record` with no rule distinguishing them, and `distilled-memory` i
 These are **not** OKF documents and must not carry frontmatter:
 
 1. **`CLAUDE.md`** — a runtime artefact, injected verbatim into the model's context. YAML at the top
-   would be noise inside the always-on budget, not metadata for a reader.
+   would be noise in the always-on context, not metadata for a reader.
 2. **`memory/auto/**`** — machine-owned. `memory-mirror` copies these byte-for-byte from the runtime's
    own store, so they carry *its* schema (`name`, `description`, `metadata.node_type`). Adding OKF fields
    by hand is not merely pointless, it is **undone by the next nightly run**. Byte-identity is the

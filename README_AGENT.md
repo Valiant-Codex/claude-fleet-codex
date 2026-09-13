@@ -98,12 +98,11 @@ Now **replace the placeholders** (`<ORG>`, `<AGENT>`, `<ROLE>`, `<VPS_HOST>`, `<
 real values in the copied files, and fill in — these three are what make an agent useful from its first
 turn, so do not skip them:
 
-1. your brain's **`CLAUDE.md`** — the whole always-on contract: identity and voice, scope and
-   delegation, the untrusted-content rule, the human-confirm gates. It is the file the runtime loads
-   by itself (with what it `@`-imports, the output style and the skills' descriptions), so anything
-   that must bind belongs in it, or in `shared/fleet-conduct.md` which it imports, and nowhere else;
+1. your brain's **`CLAUDE.md`** — the contract: identity, scope and delegation, the untrusted-content
+   rule, the human-confirm gates. What reaches a session at launch, and therefore where a binding rule
+   can live, is stated once in `kb-agent-shared/templates/agent-template.md`, "What loads at launch";
 2. **`kb-agent-shared/owner-profile.md`** — who *you* are, how you want to be worked with, and what your
-   org is. It ships as a skeleton of prompts. It is **not** auto-loaded — `CLAUDE.md` and its imports are — but every
+   org is. It ships as a skeleton of prompts. It is **not** auto-loaded, but every
    agent reads it when a task needs context about you, so if you leave it unfilled your agents read
    placeholder text as fact about you;
 3. `deploy/topics.tsv` — the session(s) you want.

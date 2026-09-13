@@ -16,8 +16,8 @@ global policies, ecosystem state, conventions, cross-agent decisions, and templa
 its own repository (`kb-agent-<role>-<name>`) that reaches this repo through a `shared` symlink to a
 **sibling clone** at `../kb-agent-shared` (not a git submodule — see the Claude Fleet Codex docs (`config-model.md`)).
 
-Your own `CLAUDE.md` is already loaded — it is the one always-on file. Read from `shared/`
-only what the task needs. Keep the initial context small.
+Your own `CLAUDE.md` and what it imports are already loaded. Read from `shared/` only what the task
+needs. Keep the initial context small.
 
 ## Human
 

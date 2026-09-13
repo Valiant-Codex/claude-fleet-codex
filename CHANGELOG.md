@@ -6,6 +6,36 @@ All notable changes to **claude-fleet-codex** are documented here. The format is
 versions may include structural changes. `1.0.0` is reserved for a deliberate "stable and proven"
 milestone.
 
+## [0.11.1] — 2026-09-13 — What loads at launch is stated once; the other copies become pointers
+
+### Fixed
+
+- `templates/kb-agent-shared/templates/agent-template.md`: rewritten. New section "What loads at
+  launch" is the single statement of the always-on set (five inputs, four-hop imports, no byte budget,
+  the index read limit). Removed: the three-input enumeration and the "voice stated verbatim in
+  CLAUDE.md" sentence that contradicted the next paragraph, both introduced in 0.11.0; dated
+  measurements in the body.
+- Stale copies of the launch-loading fact, replaced by a pointer to that section:
+  `docs/architecture.md`, `README_AGENT.md`, `docs/portability.md`, `templates/kb-agent-template/README.md`
+  (two places), `templates/kb-agent-shared/bootstrap.md`. "identity and voice" removed where it
+  described `CLAUDE.md`.
+- `templates/kb-agent-shared/skills/agent-audit/SKILL.md`, `skills/knowledge-governance-workflow/SKILL.md`:
+  "always-on budget" wording (the budget was retired in 0.8.10).
+- `templates/infra/scripts/__pycache__/failopen-lintcpython-312.pyc` untracked (committed by 0.11.0's
+  `git add -A`); `.gitignore` gains `__pycache__/` and `*.pyc`.
+
+### Changed
+
+- `CONTRIBUTING.md`: step 1 names `diff -rq` and says which files the diff cannot see; step 2 says
+  CHANGELOG entries record and do not explain; the pre-tag list adds `py_compile` for Python tools,
+  a staged-artefact check, a whole-repo search for every fact a release retires (synonyms, not one
+  phrasing), and one read of the release's own diff for self-contradiction — the last two marked as
+  judgement, not mechanism.
+
+Not built, on three independent advisor passes: a release-delta script (paths already mirror; a log
+cannot see a hunk missed earlier) and a template smoke test (duplicates `agentic-divergence-check`,
+needs a placeholder vocabulary, would not have caught prose).
+
 ## [0.11.0] — 2026-09-13 — Fleet-common conduct stated once, imported by every CLAUDE.md
 
 The Opus 5 system card (24 July 2026, §2 and §6.5) measures a model that states answers it is unsure
@@ -1733,6 +1763,7 @@ actually does, and adds the one new thing that prevents the same rot returning: 
   infra (systemd-supervised Remote Control topics, `kb-sync`, `provision-agent`, monitoring with a
   dead-man's switch); and the docs write-up.
 
+[0.11.1]: https://github.com/Valiant-Codex/claude-fleet-codex/releases/tag/v0.11.1
 [0.11.0]: https://github.com/Valiant-Codex/claude-fleet-codex/releases/tag/v0.11.0
 [0.10.1]: https://github.com/Valiant-Codex/claude-fleet-codex/releases/tag/v0.10.1
 [0.10.0]: https://github.com/Valiant-Codex/claude-fleet-codex/releases/tag/v0.10.0

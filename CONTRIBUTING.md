@@ -45,12 +45,17 @@ line to be written the moment a change was judged framework-level; in practice t
 the delta mechanically instead:
 
 1. **Diff `templates/` against the reference implementation** (the private `infra/` and
-   `kb-agent-shared/` it was distilled from) and account for every hunk: port it (generalized,
-   placeholders per ground rule 2), or consciously leave it private (deployment-specific). The diff
-   cannot forget; a convention can.
+   `kb-agent-shared/` it was distilled from — `diff -rq` per tree, then the hunks) and account for
+   every hunk: port it (generalized, placeholders per ground rule 2), or consciously leave it private
+   (deployment-specific). The diff cannot forget; a convention can. Files with no reference
+   counterpart — the template `CLAUDE.md` and README, `bootstrap.md`, the docs — are invisible to this
+   step; the sweep below is what covers them.
 2. Write the CHANGELOG section for the release **from that reconciled diff**:
    `## [X.Y.Z] — YYYY-MM-DD — <headline>`. Pre-1.0, a batch of correctness/honesty fixes is a
-   **minor**; a single scoped security/robustness fix is a **patch**.
+   **minor**; a single scoped security/robustness fix is a **patch**. **Entries record, they do not
+   explain**: what changed, in which files, and the one-line reason. The reasoning lives in the
+   reference deployment's decision records; a CHANGELOG written as essays restates every mechanism
+   and goes stale like any other copy (it was the largest document in this repo by 0.11.0).
 3. Add the link definition at the bottom: `[X.Y.Z]: .../releases/tag/vX.Y.Z`.
 4. Commit as `vX.Y.Z: <headline>`, then an **annotated** tag `vX.Y.Z` with subject
    `claude-fleet-codex vX.Y.Z — <headline>`.
@@ -58,9 +63,19 @@ the delta mechanically instead:
    tag so the CHANGELOG's links resolve.
 
 Before tagging, sanity-check the mechanical things that have actually been missed before: every version
-has a link definition, every shipped script still passes `bash -n`, and no
-`Valiant‑Codex`-specific name survives under `templates/` (grep for the reference deployment's
-agent names and org).
+has a link definition, every shipped shell script still passes `bash -n` (Python tools:
+`python3 -m py_compile`), no `Valiant‑Codex`-specific name survives under `templates/` (grep for the
+reference deployment's agent names and org), and `git status --ignored` shows no build artefact staged
+(`git add -A` shipped a `.pyc` in 0.11.0).
+
+Two more, and both are judgement, not mechanism — say so to yourself when you run them: **for every
+claim this release changes or retires, search the whole repo for the fact, not one phrasing** (list
+the synonyms the first hits suggest: "only file", "one file", "loads by itself", "always-on file",
+"identity and voice" were the ones for the launch-loading fact, and 0.8.6's author did not conceive
+"voice moves to output styles" as retiring "only file" at all); and **read the release's own diff
+once for self-contradiction** — 0.11.0 stated a fact and its negation in one hunk of one file. Neither
+step can be verified to have run. The structural protection is the one-place rule: a fact that lives
+in one file and is pointed at from the others has nothing to sweep.
 
 ## Origin
 
