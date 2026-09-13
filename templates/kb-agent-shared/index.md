@@ -16,6 +16,7 @@ Start with [`bootstrap.md`](bootstrap.md). Use this file only when you need to n
 ## Start Here
 
 - [`bootstrap.md`](bootstrap.md) — minimal shared startup context and current ecosystem state.
+- [`fleet-conduct.md`](fleet-conduct.md) — always-on conduct rules, imported by every agent's `CLAUDE.md`.
 - [`README.md`](README.md) — purpose, operating model, and repository shape.
 
 ## Areas

@@ -14,8 +14,8 @@ It **reports, it never fixes.** Fixes go through a human (or the `agent-audit` s
 Per agent brain:
 
 - **Declared shape** — `CLAUDE.md` exists and carries the sections whose absence is silent (the
-  confirm gates, the untrusted-content rule, the autonomous-OK list); it stays inside a 20 KB working
-  budget; no `SOUL.md`/`OPERATING.md` survives from the pre-0.7.0 split.
+  confirm gates, the untrusted-content rule, the autonomous-OK list); no `SOUL.md`/`OPERATING.md`
+  survives from the pre-0.7.0 split. There is no byte budget (see the index read limit below).
 - **Frontmatter is real metadata** — it parses as YAML, and every `type` is drawn from the closed
   nine-value vocabulary in `knowledge-governance-workflow`, everywhere except the two documented
   exemptions (`CLAUDE.md`, `memory/auto/**`). Fails *closed*: with PyYAML missing it reports that it

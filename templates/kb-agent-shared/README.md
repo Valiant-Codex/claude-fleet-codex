@@ -39,6 +39,9 @@ in Notion or another explicit business source of truth, not in any agent reposit
 ## Repository Shape
 
 - `bootstrap.md` — minimal shared startup contract + ecosystem state.
+- `fleet-conduct.md` — the three conduct rules every agent carries always-on: each `CLAUDE.md`
+  imports it with `@shared/fleet-conduct.md`, so an edit here reaches every agent's next session
+  through the sync timer, unreviewed. Model-independent conduct only.
 - `index.md` — top-level navigation map.
 - `policies/` — global policies.
 - `skills/` — fleet-common skills, symlinked into every agent's `skills/`. **The

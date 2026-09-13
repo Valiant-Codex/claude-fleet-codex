@@ -20,8 +20,9 @@ decision in `decisions/` first (a dated `add-<agent>-<role>-agent.md` record is 
 ## Repo shape (`kb-agent-<role>-<name>`)
 
 ```
-CLAUDE.md            ← THE contract: identity, voice, scope, gates, threat model. Symlinked to
-                       ~/CLAUDE.md. The only file the runtime loads — nothing else is automatic.
+CLAUDE.md            ← THE contract: identity, scope, gates, threat model. Symlinked to
+                       ~/CLAUDE.md. Loaded at launch with what it @-imports; the output style and
+                       the skills' descriptions are the only other always-on inputs.
 memory/              ← durable memory (distilled-memory.md + auto/); see policies/memory-policy.md
 tools/               ← tool/MCP registry (README.md); secrets are ${ENV} placeholders, never committed
 skills/              ← folder-per-skill (<name>/SKILL.md); fleet-common ones symlink shared/skills/*
@@ -63,10 +64,13 @@ it is a suggestion.** If a rule must hold, it belongs in the file the runtime re
 by *durability* (rarely-changed identity vs mutable contract) is a good instinct for authoring and a bad
 one for loading — git already gives you the durability distinction, for free, without a second file.
 
-Size is not the constraint people assume. Verified against Claude Code 2.1.224: a `CLAUDE.md` is skipped
-only above **4 MiB**, with a soft threshold at **40k characters**. A complete single-file contract runs
-8–12 KB. Budget ~20 KB as a working ceiling — not because the runtime objects, but because an always-on
-file competes with itself for attention.
+Size is not the lever people assume. The runtime skips a `CLAUDE.md` only above **4 MiB** (memory docs,
+re-read 2026-09-13); the vendor's guidance is "target under 200 lines per file", and `@`-imports count
+in full because they expand at launch. A complete single-file contract runs 8–12 KB. There is no
+always-on byte budget (retired in 0.8.10): the field evidence behind that release is that raw length
+has no measurable effect and the number of competing instructions does. So the discipline is fewer,
+unambiguous rules — not fewer bytes — and emphasis rationed to the lines whose breach is expensive: the
+vendor's own rule is that if many lines are emphasised, none stands out.
 
 ### The one-place rule
 
@@ -78,6 +82,15 @@ an agent fetch its own register — by the time it could, it has already spoken)
 *before* the agent knows a policy exists (untrusted-content; data residency and not-a-gestor where they
 apply), the confirm gates and their autonomous-OK counterweight, and the delegation map, because an
 agent cannot lazily retrieve the knowledge that a task belongs to someone else.
+
+The output style is the second always-on file: voice and register live in
+`deploy/output-styles/<agent>.md`, symlinked under `~/.claude/output-styles/` and loaded at launch
+(0.8.6), so `CLAUDE.md` states neither.
+
+Fleet-common always-on rules are the exception to "verbatim": they live once in
+`shared/fleet-conduct.md` and every `CLAUDE.md` imports them with `@shared/fleet-conduct.md`
+(imports expand at launch; tested through the `shared` symlink 2026-09-13, no approval dialog).
+A rule goes there only if it holds for any model and any agent.
 
 Retrieved on demand, therefore stated once in its own file and merely pointed at: everything else —
 link lists, path mechanics, historical reasoning, deep procedure. Procedure specifically belongs in a

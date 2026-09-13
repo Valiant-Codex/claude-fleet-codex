@@ -6,6 +6,63 @@ All notable changes to **claude-fleet-codex** are documented here. The format is
 versions may include structural changes. `1.0.0` is reserved for a deliberate "stable and proven"
 milestone.
 
+## [0.11.0] — 2026-09-13 — Fleet-common conduct stated once, imported by every CLAUDE.md
+
+The Opus 5 system card (24 July 2026, §2 and §6.5) measures a model that states answers it is unsure
+of with confidence, hallucinates facts more than its predecessor, and agrees more readily when pushed
+on something it knows is wrong. The vendor's first named mitigation is explicit permission to admit
+uncertainty. No always-on surface in this framework carried it, and until now the only way to add an
+every-session rule was to paste it verbatim into each agent's `CLAUDE.md`, where N copies drift. The
+reference deployment tested the alternative: an `@shared/<file>` import in `CLAUDE.md`, resolved
+through the committed `shared` symlink to the sibling clone, expands at launch, shows under the symlink
+path in `/context`, and raises no approval dialog. So a fleet-common rule can now be stated once.
+
+### Added
+
+- **`templates/kb-agent-shared/fleet-conduct.md`** — three model-independent rules: distinguish what you
+  verified from what you recall, and say which ("I don't know" is a complete answer); a fact that will
+  change a decision carries its check in the same breath or is labelled *unverified*; when the owner
+  disputes a fact you verified, show the source again and move only on new evidence. The template
+  `CLAUDE.md` imports it with `@shared/fleet-conduct.md`. **Only conduct that holds for any model
+  belongs there.** Tuning for one model — verbosity, self-verification, correction narration, subagent
+  caps — goes in the agent's output style or the harness: on another model it can do harm (the Opus 5
+  prompting guide says to remove self-recheck instructions; the Fable 5 guide wants them on long runs).
+  The cost is named and accepted: the file widens the always-on surface that reaches every agent
+  through the unreviewed sync timer, the same exposure class as `shared/skills/`, now at every launch.
+  No new writer, no new channel.
+- **`decision-loop` step 4 carries a note** distinguishing its advisor pass from the self-verification
+  the Opus 5 guide says to remove: a fresh agent that never saw the reasoning it attacks is the
+  writer/verifier split the vendor's *Best practices for Claude Code* endorses, not a "double-check
+  your answer" instruction. Never add generic re-check phrasing to that skill.
+
+### Fixed
+
+- **The template `CLAUDE.md` described a runtime that no longer exists.** It called itself "the only"
+  always-on file (false since 0.8.6 moved voice to output styles, and false again with imports), still
+  carried an inline **Voice** paragraph, said imports resolve "to depth 5" (the vendor's memory docs:
+  four hops), and told authors to keep the file under ~20 KB with a 40k-character soft threshold — the
+  budget 0.8.10 retired and a threshold not on the current docs page. It now names the five always-on
+  inputs (this file, its imports, the skills' descriptions, the output style, the auto-memory index),
+  points voice at the output style, imports `fleet-conduct.md`, and states the recorded position: no
+  byte budget, "under 200 lines per file" as the vendor's guidance, instruction count and ambiguity as
+  the levers. Emphasis was rationed from 24 bold spans in 85 lines to the rules whose breach is
+  expensive — the vendor's own rule is that if many lines are emphasised, none stands out.
+- **`agent-template.md`** said `CLAUDE.md` is "the only file the runtime loads" and kept the ~20 KB
+  budget; both corrected, and two paragraphs added: the output style as the second always-on file, and
+  fleet-common rules as the one exception to "stated verbatim".
+- **`docs/divergence-check.md`** claimed the check keeps `CLAUDE.md` "inside a 20 KB working budget"
+  fourteen lines above the paragraph explaining that no such budget is asserted. `README_AGENT.md` and
+  `docs/portability.md` no longer call `CLAUDE.md` the only auto-loaded file.
+
+### Reference deployment, not ported
+
+The same pass deleted one duplicated rule from the root agent's `CLAUDE.md` (a "before any mutation,
+wait" principle that contradicted "commits and PRs need no ceremony" while the gate list already stated
+it correctly scoped) and declined to add the Opus 5 guide's narration-cadence line to the output
+styles: the vendor says a technique measured on one model must be re-checked before applying it to
+another, and names Fable 5.1 as having the opposite tendency. Deployment-specific; recorded here so
+nobody ports the cadence line as an improvement.
+
 ## [0.10.1] — 2026-09-12 — Renamed to claude-fleet-codex: named for what it is, a Claude Code fleet, not a portable one
 
 Nothing executable changes in this release; it is a patch by the owner's call because every script,
@@ -1676,6 +1733,7 @@ actually does, and adds the one new thing that prevents the same rot returning: 
   infra (systemd-supervised Remote Control topics, `kb-sync`, `provision-agent`, monitoring with a
   dead-man's switch); and the docs write-up.
 
+[0.11.0]: https://github.com/Valiant-Codex/claude-fleet-codex/releases/tag/v0.11.0
 [0.10.1]: https://github.com/Valiant-Codex/claude-fleet-codex/releases/tag/v0.10.1
 [0.10.0]: https://github.com/Valiant-Codex/claude-fleet-codex/releases/tag/v0.10.0
 [0.9.0]: https://github.com/Valiant-Codex/claude-fleet-codex/releases/tag/v0.9.0

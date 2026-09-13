@@ -13,7 +13,7 @@ true of the brain content too. What the brains contain is written for this harne
 
 | Piece of a brain | Why it is Claude Code's, not generic Markdown |
 |---|---|
-| `CLAUDE.md` | The one file the harness auto-loads, with its `@`-import syntax for the distilled memory and the runtime's own rules about what reaches context |
+| `CLAUDE.md` | The file the harness auto-loads, with its `@`-import syntax for the distilled memory and the fleet-common conduct, and the runtime's own rules about what reaches context |
 | `memory/auto/` | A nightly mirror of the harness's **auto-memory store**, whose index has the harness's hard read limit — the memory model is built around that cliff ([`memory.md`](memory.md), [`context-budget.md`](context-budget.md)) |
 | `skills/*/SKILL.md` | Anthropic's Agent Skills format, discovered through `~/.claude/skills` |
 | `decision-loop`, `advisor-review`, `agent-audit` | Written against the harness's sub-agent tool: an advisor pass *is* a fresh sub-agent |

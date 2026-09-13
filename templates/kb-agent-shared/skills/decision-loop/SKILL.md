@@ -89,6 +89,11 @@ Keep this list tight. Step 4 runs on every invocation, so a loop that fires on t
    `arxiv.org/abs/2608.25869`). A critic that has read the argument it is meant to attack is the
    anchored case. **Constraints, output shape and the verify-before-amplify rule live in
    `advisor-review` — follow it, do not restate it here.**
+   ⚠️ Anthropic's *Prompting Claude Opus 5* guide says to **remove** self-verification instructions
+   ("double-check your answer", "use a subagent to verify") because they cause over-verification on
+   Opus 5. This step is not that: it is a fresh agent that never saw the reasoning it attacks, which
+   the same vendor's *Best practices for Claude Code* endorses ("so the agent doing the work isn't
+   the one grading it"). Keep the advisor; never add generic re-check phrasing anywhere in this skill.
 
 5. **Recap, then decide.** A short recap of what *changed* between the strawman and the post-advisor
    position — not a re-narration of the analysis. Then put the choices through `AskUserQuestion`: one
