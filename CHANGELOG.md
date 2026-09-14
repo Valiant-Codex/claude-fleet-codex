@@ -6,6 +6,18 @@ All notable changes to **claude-fleet-codex** are documented here. The format is
 versions may include structural changes. `1.0.0` is reserved for a deliberate "stable and proven"
 milestone.
 
+## [0.11.2] — 2026-09-14 — advisor-review: choosing the model, and briefing a second round
+
+### Added
+
+- `templates/kb-agent-shared/skills/advisor-review/SKILL.md`, two sections. "Choosing the model": the
+  sub-agent tool names model families only; an exact version runs as a read-only CLI session
+  (`claude -p --model <id> --allowedTools …`), and the advisor states its model id in its first line.
+  "The second round, when a plan will be executed": briefed with the revised plan and the history on
+  purpose, for residue and regression rather than diagnosis. The 2026-09-13 numbers (three rounds,
+  three models, returns falling from the second) are recorded as one observation; the standing
+  one-pass rule is unchanged.
+
 ## [0.11.1] — 2026-09-13 — What loads at launch is stated once; the other copies become pointers
 
 ### Fixed
@@ -1763,6 +1775,7 @@ actually does, and adds the one new thing that prevents the same rot returning: 
   infra (systemd-supervised Remote Control topics, `kb-sync`, `provision-agent`, monitoring with a
   dead-man's switch); and the docs write-up.
 
+[0.11.2]: https://github.com/Valiant-Codex/claude-fleet-codex/releases/tag/v0.11.2
 [0.11.1]: https://github.com/Valiant-Codex/claude-fleet-codex/releases/tag/v0.11.1
 [0.11.0]: https://github.com/Valiant-Codex/claude-fleet-codex/releases/tag/v0.11.0
 [0.10.1]: https://github.com/Valiant-Codex/claude-fleet-codex/releases/tag/v0.10.1

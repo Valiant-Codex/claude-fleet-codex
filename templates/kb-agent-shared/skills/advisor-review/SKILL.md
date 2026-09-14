@@ -38,6 +38,39 @@ Not for routine, reversible, easily-tested work: an advisor costs tokens and wal
   this exist", architecture opinions. Costs more briefing, but its verdict is genuinely independent.
   Prefer this whenever the question is *whether* the work was a good idea.
 
+### Choosing the model
+
+The sub-agent tool takes `model: sonnet | opus | haiku | fable` — the current version of each, not a
+chosen one. For an exact version, run the advisor as a separate CLI session with read-only tools:
+
+```
+claude -p --model <exact-model-id> --permission-mode default \
+  --allowedTools "Read,Grep,Glob,Bash(git log:*),Bash(git show:*),Bash(grep:*),Bash(sed:*),Bash(diff:*),Bash(comm:*),Bash(ls:*),Bash(cat:*)" \
+  "$(cat brief.md)" > report.md
+```
+
+Ask it to state its model id in the first line; the answer is the only proof of which model reviewed.
+A CLI advisor has no web fetch unless you allow it, so a vendor-docs question stays "could not verify"
+there — check it yourself. Different models find different things: on 2026-09-13 three models over
+three rounds each found residue the others had missed, so when a second round is worth running, run
+it on a model that has not seen the artefact yet.
+
+### The second round, when a plan will be executed
+
+The first advisor gets the artefact and the question, nothing else, and no hint of the preferred option
+(anchoring — see below). A second round is a different job and is briefed differently: it gets the
+revised plan **and** the history — the original proposal, the first report, the errors it found — in
+one file, and its task is residue and regression, not diagnosis: what is still wrong, what the revision
+broke, what nobody has checked. Anchored by design, on purpose.
+
+Measured once, 2026-09-13, on a plan to keep the public codex templates current: round 1 (one model)
+found the cause and two errors in the proposal; round 2 (two models) found three more stale copies,
+a regression in the revised plan (a `git log` offered in place of a diff), a tracked binary, and a
+self-contradiction inside one edited file; round 3 (two other models) confirmed, corrected one count,
+and said "land it". Returns fell from the second round; a third mostly buys confidence. This is one
+observation, not a rule: the standing rule is one advisor pass on every decision, and the second
+round is for a plan whose execution outlives the session.
+
 ## Constraints to give it, every time
 
 State these explicitly in the prompt — they are not optional:
