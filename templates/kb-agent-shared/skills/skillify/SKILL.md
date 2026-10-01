@@ -1,6 +1,6 @@
 ---
 name: skillify
-description: Author, update, or retire a <ORG> agent skill in the v2 format (folder + SKILL.md, name+description frontmatter, progressive disclosure, lifecycle). Use after you've repeated a procedure worth codifying, when a skill needs updating, or when adding/retiring one.
+description: Author, update, or retire a <ORG> agent skill in the v2 format (folder + SKILL.md, name+description frontmatter, progressive disclosure, lifecycle). Use after you've repeated a procedure worth codifying, when <OWNER> asks for a skill to be made or changed, when a skill needs updating, or when adding/retiring one.
 type: skill
 title: Skillify — author and maintain skills
 tags:
@@ -10,7 +10,7 @@ tags:
 - lifecycle
 - fleet
 status: active
-timestamp: 2026-08-27T00:00:00Z
+timestamp: 2026-09-26T00:00:00Z
 ---
 # Skillify
 
@@ -23,6 +23,7 @@ it lives once in `shared/skills/skillify/` and is symlinked into each agent's `s
 - You've performed a procedure two or three times and it's worth codifying.
 - An existing skill is out of date, or its steps changed.
 - You're adding a new capability, or retiring an obsolete one.
+- <OWNER> asks for a skill to be made, or for one to change.
 
 Do **not** pre-write speculative skills for things that haven't happened. One skill = one procedure you
 actually perform.
@@ -71,14 +72,65 @@ timestamp: <ISO-8601>
 
 ## Procedure
 
-- **Create:** pick a name (taxonomy above) → `mkdir skills/<name>` → write `SKILL.md` (frontmatter +
-  lean body) → add `references/`/`scripts/` only if genuinely needed → validate (below) → commit. The
-  commit **is** the review gate; <OWNER> can veto or roll back via git history.
-- **Update:** edit in place and commit. If behavior changed materially, say so in the commit.
+First decide the mode. Look for `skills/<name>/` in your own repo **and** in `shared/skills/`, under the
+name you have in mind and under any name that covers the same job. A second skill for an intent that
+already has one is the shadowing `skills-policy.md` guardrail 8 warns about.
+
+- **Not found → create.** Interview when it is mandatory (below) and get the summary approved;
+  otherwise answer its seven topics in the commit body. Then: pick a name (taxonomy
+  above) → `mkdir skills/<name>` → write `SKILL.md` (frontmatter + lean body) → add
+  `references/`/`scripts/` only if genuinely needed → validate (below) → commit → push → give <OWNER>
+  the commit link.
+- **Found → update.** Read the `SKILL.md` and its history before asking anything. For a shared skill
+  run `git log -p -- skills/<name>` inside `kb-agent-shared`: in your own repo that path is a symlink
+  and shows only the commit that added it. Interview on what works and what does not (same rule as
+  create), then edit in place, validate, commit, push and give the link. If behavior changed
+  materially, say so in the commit. Only the privileged agent writes `shared/skills/`; any other agent
+  hands the approved summary to it through <OWNER>.
+- The commit **is** the review gate; <OWNER> can veto or roll back via git history. The approved
+  summary comes before the diff review; it does not replace it.
 - **Retire:** mark `status: superseded` with a top banner pointing to the replacement (keep it in place
   while anything still references it), or **delete it** — git holds the body and the reasoning. Do not
   park it in a parallel `skills-archive/` tree: it becomes a second place to keep current, and the
   reference deployment's archive grew six live references to a skill its own registry still called active.
+
+## Interview — find out what <OWNER> wants before writing
+
+A skill built from the data alone encodes your guesses about their workflow. The interview replaces
+the guesses with their answers.
+
+**When it is mandatory:** the skill serves a workflow of <OWNER>'s **and** <OWNER> is in the session.
+If it serves their workflow and they are not in the session, do not write it: wait until they are. An
+internal technical skill you write alone keeps the path above, but its commit body answers the same
+seven topics in writing — "not asked" is an allowed answer — so the gap is visible in review.
+
+**The seven topics** (in update mode, ask about each as "what works, what does not"):
+
+1. **Goals** — what the skill is for, what problem it removes.
+2. **Steps** — the sequence as they see it, not as the data suggests.
+3. **Don'ts** — what it must never do.
+4. **Input and real examples** — how they will invoke it, with 2–3 phrases they would actually type.
+   Keep them verbatim: they are the test prompts for Validation step 1.
+5. **Output and "done"** — what they expect at the end, and how they tell it went well.
+6. **Boundaries and autonomy** — what it may do alone, where it must stop and ask, what it must never
+   touch.
+7. **Edge cases** — what happens when data is missing or ambiguous.
+
+**Pace.** Blocks of 2–4 questions with `AskUserQuestion`, until the seven are covered. Read what exists
+first (the data, the old skill, its log) so each option is a real candidate, and leave free text open
+for the answers you could not foresee. Topic 4 has no options to offer: ask for their phrases in plain
+text, outside the menu.
+
+- Do not mark a "(Recommended)" option where the answer lives only in their head. Mark one only where
+  you have analysed the options, and show the analysis.
+- Never put a question inside a procedural prompt ("another block?"): that is how a cap gets breached.
+- At the end of a block, name any answers that contradict each other and ask them to resolve them. Do
+  not resolve them yourself.
+
+**The summary.** When the topics are covered, write the skill in plain language, in a few short
+paragraphs: what it does, the steps, what it never does, when it stops and asks, what "done" looks
+like. List anything never asked as an assumption. <OWNER> approves it, or corrects it, **before any
+file is written**. Their approval is what ends the interview; you do not end it on your own.
 
 ## Guardrails
 
@@ -107,7 +159,8 @@ Two levels. The first checks the shape; the second checks whether the skill is w
 baseline". This is how you answer it instead of guessing.
 
 1. Write 2–3 realistic test prompts — what <OWNER> would actually type, not a paraphrase of your own
-   `description`. A prompt written from the description tests the description, not the skill.
+   `description`. A prompt written from the description tests the description, not the skill. When
+   an interview ran, use the phrases they gave for topic 4, verbatim.
 2. For each prompt, spawn **two** sub-agents **in the same turn**: one given the skill's path, one
    given no skill at all. Same prompt, same inputs. Write outputs under the session scratchpad,
    `<scratchpad>/skill-eval/<name>/<prompt-id>/{with,without}/`. Launch them together — staggering

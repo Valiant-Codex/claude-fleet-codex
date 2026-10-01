@@ -199,7 +199,11 @@ try:
         # frontmatter there is Claude Code's own schema (name/description/keep-coding-instructions),
         # parsed live by the harness, not OKF's. Same reasoning as CLAUDE.md: an OKF `type` field
         # would be noise in a schema this checker does not own.
-        dirs[:]=[d for d in dirs if d not in ('.git','auto','output-styles')]
+        # skills/synced/: a fourth (2026-09-30). Claude Code writes the claude.ai account's skills there
+        # and overwrites them on every sync; the repo gitignores it. Vendor files we must not edit —
+        # the memory/auto reasoning. Pruned by exact path, so a `synced` folder elsewhere is still walked.
+        dirs[:]=[d for d in dirs if d not in ('.git','auto','output-styles')
+                 and os.path.relpath(os.path.join(root,d),R)!=os.path.join('skills','synced')]
         for fn in files:
             if not fn.endswith('.md') or fn=='CLAUDE.md': continue
             p=os.path.join(root,fn)
@@ -348,6 +352,8 @@ check_brain(){ # <user> <repo>
   for d in "$r"/skills/*/; do
     [ -d "$d" ] || continue
     nm="$(basename "$d")"; sk="$d/SKILL.md"
+    # The harness-owned sync bucket (see check_frontmatter): it nests skills one level down, by design.
+    [ "$nm" = synced ] && continue
     [ -f "$sk" ] || { drift "$n: skills/$nm has no SKILL.md (invisible to the harness)"; continue; }
     local fn fd
     fn="$(awk -F': *' '/^name:/{print $2; exit}' "$sk" | tr -d ' \r')"

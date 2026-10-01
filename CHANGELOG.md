@@ -6,6 +6,41 @@ All notable changes to **claude-fleet-codex** are documented here. The format is
 versions may include structural changes. `1.0.0` is reserved for a deliberate "stable and proven"
 milestone.
 
+## [0.12.0] — 2026-10-01 — skillify interviews the owner; agent-audit reads a transcript
+
+### Added
+
+- `templates/kb-agent-shared/skills/skillify/SKILL.md`: a mode check first (an existing skill under
+  any name that covers the job means update, not create), and an interview before writing a skill
+  that serves the owner's workflow — seven topics in blocks of 2–4 questions, then a plain-language
+  summary the owner approves before any file is written. Owner's workflow with the owner absent: do
+  not write it. An internal skill written alone answers the seven topics in its commit body. The
+  owner's example phrases become the eval prompts verbatim.
+- `templates/kb-agent-shared/skills/agent-audit/SKILL.md`: pass 5, measure one run from its session
+  transcript (tool counts, timestamps, order, breached bounds) rather than asking the agent. The only
+  pass that sees what the agent did instead of what the brain says.
+
+### Fixed
+
+- `templates/kb-agent-shared/skills/decision-loop/SKILL.md`: the premortem citation. The "+30%
+  reasons generated" figure was attributed to Veinott, Klein & Wiggins 2010, which measured plan
+  confidence; it is Mitchell 1989 alone, never independently replicated. The step is now justified by
+  the overconfidence effect only.
+- `templates/infra/scripts/agentic-divergence-check`: skip `skills/synced/`, where Claude Code writes
+  the account's claude.ai skills and overwrites them on every sync. The check reported vendor files
+  without an OKF `type`, and the bucket itself as a skill with no `SKILL.md`. Pruned by exact path.
+- `templates/kb-agent-template/.gitignore`: ignore `skills/synced/`, so the nightly commit does not
+  carry vendor skill bundles into the brain repo.
+- `docs/divergence-check.md`: the exemption list named two of the four exemptions.
+
+### Reference deployment, not ported
+
+- A PostToolUse hook that tells a session to arm its own resume before the account's 5-hour usage
+  limit, with two divergence-check guards for it. It reads usage from statusline snapshots written by
+  a dashboard this template does not ship, so here it would be installed and do nothing. Its main
+  case, a resume after a real block, is not yet proven. `codex-propagation-check` reports those two
+  guards as gaps on purpose.
+
 ## [0.11.2] — 2026-09-14 — advisor-review: choosing the model, and briefing a second round
 
 ### Added
@@ -1775,6 +1810,7 @@ actually does, and adds the one new thing that prevents the same rot returning: 
   infra (systemd-supervised Remote Control topics, `kb-sync`, `provision-agent`, monitoring with a
   dead-man's switch); and the docs write-up.
 
+[0.12.0]: https://github.com/Valiant-Codex/claude-fleet-codex/releases/tag/v0.12.0
 [0.11.2]: https://github.com/Valiant-Codex/claude-fleet-codex/releases/tag/v0.11.2
 [0.11.1]: https://github.com/Valiant-Codex/claude-fleet-codex/releases/tag/v0.11.1
 [0.11.0]: https://github.com/Valiant-Codex/claude-fleet-codex/releases/tag/v0.11.0

@@ -17,8 +17,9 @@ Per agent brain:
   confirm gates, the untrusted-content rule, the autonomous-OK list); no `SOUL.md`/`OPERATING.md`
   survives from the pre-0.7.0 split. There is no byte budget (see the index read limit below).
 - **Frontmatter is real metadata** — it parses as YAML, and every `type` is drawn from the closed
-  nine-value vocabulary in `knowledge-governance-workflow`, everywhere except the two documented
-  exemptions (`CLAUDE.md`, `memory/auto/**`). Fails *closed*: with PyYAML missing it reports that it
+  nine-value vocabulary in `knowledge-governance-workflow`, everywhere except the documented
+  exemptions (`CLAUDE.md`, `memory/auto/**`, `output-styles/**`, and `skills/synced/**`, where the
+  harness writes the account's claude.ai skills). Fails *closed*: with PyYAML missing it reports that it
   could not validate rather than passing. Note what it does **not** do — it never checks `type`
   against a file's location, so "a `SKILL.md` is `type: skill`" is honour-system, not enforced.
 - **Skills are discoverable** — folder-per-skill with a `SKILL.md`, frontmatter `name` matching the

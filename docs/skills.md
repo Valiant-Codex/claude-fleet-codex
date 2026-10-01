@@ -48,10 +48,13 @@ proved useful in the reference deployment, not because it seemed like a good ide
 - **`skillify`** — the executable companion to `policies/skills-policy.md`: how to author, update, and
   retire a skill in this format, including the naming taxonomy, the lifecycle, and how to check a
   skill actually helps — a with/without sub-agent comparison, because a skill that reads well and
-  changes nothing is the one a reviewer keeps by default.
+  changes nothing is the one a reviewer keeps by default. When the skill serves the owner's own
+  workflow, it interviews the owner on seven topics and gets a plain-language summary approved before
+  any file is written.
 - **`agent-audit`** — an interactive, human-in-the-loop tune-up of one agent's brain (its `CLAUDE.md`
   contract, skills, memory): the periodic sweep where accumulated experience becomes durable change
-  (see [`memory.md`](memory.md)).
+  (see [`memory.md`](memory.md)). One of its passes measures a real run from its session transcript,
+  because it is the only pass that sees what the agent did rather than what the brain says.
 - **`advisor-review`** — how to get a genuinely independent second opinion out of a sub-agent: make it
   argue *against* you, constrain it (read-only, no credential hunting — a real incident, described in
   the skill, is why), and re-verify its load-bearing claims before you act on them.

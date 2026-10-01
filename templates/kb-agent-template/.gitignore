@@ -21,3 +21,8 @@ node_modules/
 # OS / editor
 .DS_Store
 *.swp
+
+# Claude Code writes its downloaded-skill cache here (vendor bundles: xlsx,
+# skill-creator, ...) keyed by session UUID. Runtime artefact, not knowledge:
+# the nightly commit would otherwise carry vendor files into this repo.
+skills/synced/

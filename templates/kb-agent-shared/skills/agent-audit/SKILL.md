@@ -20,7 +20,7 @@ Where the agent and the owner, **together**, review and refine that agent's brai
 
 the owner triggers it (there is no autonomous trigger) when he wants a periodic tune-up of a specific agent — e.g. after a stretch of work, or when something feels off. Run it **for one agent at a time**, as that agent (or, for another agent, via the ops agent's `fleet-brain-change`).
 
-## What it reviews (four passes)
+## What it reviews (five passes)
 
 1. **Skills** — what's missing (a procedure done repeatedly but not codified?), what's stale (steps changed?), what's obsolete (retire?). Pull candidates from `memory/auto/` (the mirrored working tier) and what actually happened since the last audit.
 2. **Identity** (the `Who you are` section of `CLAUDE.md`) — is the voice/principles still accurate and useful? Small refinements only; big identity changes are rare and deliberate.
@@ -60,6 +60,24 @@ the owner triggers it (there is no autonomous trigger) when he wants a periodic 
      is `@`-imported into every session; it grew 2.4× in fifteen days by carrying reasoning twice.
      Both are trims, so both run under the grep-and-cite rule above and land as one reviewed `[audit]`
      commit. Never do either from the session that happened to notice the number.
+5. **Measure one run from its transcript, not from recollection.** Pick a procedure that has actually
+   executed since the last audit — an interview, a decision loop, a deploy — and count what it did
+   from `~/.claude/projects/-home-<agent>/<session>.jsonl`: how many times each tool fired, at what
+   timestamps, in what order, and where the procedure's own stated bounds were breached.
+
+   **This is the only pass that can see a procedure lying about itself.** The other four read what the
+   brain *says*; this reads what the agent *did*. The one run measured this way on the reference
+   deployment — a requirements interview, 2026-09-06 — produced three defects nobody was looking for:
+   a per-round cap breached in three rounds of six, a round that ended with no prompt at all (the
+   exact property the procedure claimed was external to the agent by construction), and a citation
+   misattributed to the wrong study. None of the three would have surfaced from reading the skill, and
+   the session that ran it did not notice any of them. Agent self-reporting is inaccurate in
+   **22.58%** of sessions measured across 20,574 of them (`arxiv.org/html/2605.29442`), so asking the
+   agent what happened is not this check.
+
+   One run per audit is the whole of it — no tooling, no vocabulary to maintain, and nothing that
+   runs unattended. Where the measurement contradicts what a skill claims about itself, the
+   measurement wins and the skill is what gets edited.
 ## Procedure
 
 0. **Refresh `shared/` first** (`git -C shared pull --ff-only`, or wait for the sync timer). Fleet-common skills — including this one — propagate on the sync schedule, so a freshly-edited skill can otherwise execute with its previous body. Observed on the first real run, 2026-07-25.
